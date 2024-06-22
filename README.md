@@ -1,6 +1,6 @@
 [![Cybernetically enhanced web apps: Svelte](https://sveltejs.github.io/assets/banner.png)](https://svelte.dev)
 
-[![license](https://img.shields.io/npm/l/svelte.svg)](LICENSE.md) [![Chat](https://img.shields.io/discord/457912077277855764?label=chat&logo=discord)](https://svelte.dev/chat)
+[![npm version](https://img.shields.io/npm/v/svelte.svg)](https://www.npmjs.com/package/svelte) [![license](https://img.shields.io/npm/l/svelte.svg)](LICENSE.md) [![Chat](https://img.shields.io/discord/457912077277855764?label=chat&logo=discord)](https://svelte.dev/chat)
 
 ## What is Svelte?
 
@@ -8,30 +8,29 @@ Svelte is a new way to build web applications. It's a compiler that takes your d
 
 Learn more at the [Svelte website](https://svelte.dev), or stop by the [Discord chatroom](https://svelte.dev/chat).
 
+## Getting started
+
+You can play around with Svelte in the [tutorial](https://learn.svelte.dev/), [examples](https://svelte.dev/examples), and [REPL](https://svelte.dev/repl).
+
+When you're ready to build a full-fledge application, we recommend using [SvelteKit](https://kit.svelte.dev):
+
+```bash
+npm create svelte@latest my-app
+cd my-app
+npm install
+npm run dev
+```
+
+See [the SvelteKit documentation](https://kit.svelte.dev/docs) to learn more.
+
+## Changelog
+
+[The Changelog for this package is available on GitHub](https://github.com/sveltejs/svelte/blob/master/packages/svelte/CHANGELOG.md).
+
 ## Supporting Svelte
 
 Svelte is an MIT-licensed open source project with its ongoing development made possible entirely by fantastic volunteers. If you'd like to support their efforts, please consider:
 
 - [Becoming a backer on Open Collective](https://opencollective.com/svelte).
 
-Funds donated via Open Collective will be used for compensating expenses related to Svelte's development such as hosting costs. If sufficient donations are received, funds may also be used to support Svelte's development more directly.
-
-## Roadmap
-
-You may view [our roadmap](https://svelte.dev/roadmap) if you'd like to see what we're currently working on.
-
-## Contributing
-
-Please see the [Contributing Guide](CONTRIBUTING.md) and the [`svelte`](packages/svelte) package for information on contributing to Svelte.
-
-### svelte.dev
-
-The source code for https://svelte.dev lives in the [sites](https://github.com/sveltejs/svelte/tree/master/sites/svelte.dev) folder, with all the documentation right [here](https://github.com/sveltejs/svelte/tree/master/documentation). The site is built with [SvelteKit](https://kit.svelte.dev).
-
-## Is svelte.dev down?
-
-Probably not, but it's possible. If you can't seem to access any `.dev` sites, check out [this SuperUser question and answer](https://superuser.com/q/1413402).
-
-## License
-
-[MIT](LICENSE.md)
+Funds donated via Open Collective will be used for compensating expenses related to Svelte's development.

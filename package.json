@@ -1,55 +1,158 @@
 {
-  "name": "svelte-monorepo",
-  "version": "0.0.1",
-  "description": "monorepo for svelte and friends",
-  "private": true,
-  "type": "module",
+  "name": "svelte",
+  "description": "Cybernetically enhanced web apps",
   "license": "MIT",
-  "packageManager": "pnpm@9.2.0",
+  "version": "5.0.0-next.164",
+  "type": "module",
+  "types": "./types/index.d.ts",
   "engines": {
-    "pnpm": "^9.0.0"
+    "node": ">=18"
+  },
+  "files": [
+    "src",
+    "!src/**/*.test.*",
+    "types",
+    "compiler",
+    "*.d.ts",
+    "README.md"
+  ],
+  "module": "src/index-client.js",
+  "main": "src/index-client.js",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "browser": "./src/index-client.js",
+      "default": "./src/index-server.js"
+    },
+    "./package.json": "./package.json",
+    "./action": {
+      "types": "./types/index.d.ts"
+    },
+    "./animate": {
+      "types": "./types/index.d.ts",
+      "default": "./src/animate/index.js"
+    },
+    "./compiler": {
+      "types": "./types/index.d.ts",
+      "require": "./compiler/index.js",
+      "default": "./src/compiler/index.js"
+    },
+    "./easing": {
+      "types": "./types/index.d.ts",
+      "default": "./src/easing/index.js"
+    },
+    "./elements": {
+      "types": "./elements.d.ts"
+    },
+    "./internal": {
+      "default": "./src/internal/index.js"
+    },
+    "./internal/client": {
+      "default": "./src/internal/client/index.js"
+    },
+    "./internal/disclose-version": {
+      "default": "./src/internal/disclose-version.js"
+    },
+    "./internal/server": {
+      "default": "./src/internal/server/index.js"
+    },
+    "./legacy": {
+      "types": "./types/index.d.ts",
+      "browser": "./src/legacy/legacy-client.js",
+      "default": "./src/legacy/legacy-server.js"
+    },
+    "./motion": {
+      "types": "./types/index.d.ts",
+      "default": "./src/motion/index.js"
+    },
+    "./reactivity": {
+      "types": "./types/index.d.ts",
+      "browser": "./src/reactivity/index-client.js",
+      "default": "./src/reactivity/index-server.js"
+    },
+    "./server": {
+      "types": "./types/index.d.ts",
+      "default": "./src/server/index.js"
+    },
+    "./store": {
+      "types": "./types/index.d.ts",
+      "default": "./src/store/index.js"
+    },
+    "./transition": {
+      "types": "./types/index.d.ts",
+      "default": "./src/transition/index.js"
+    },
+    "./events": {
+      "types": "./types/index.d.ts",
+      "default": "./src/events/index.js"
+    }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sveltejs/svelte.git"
+    "url": "git+https://github.com/sveltejs/svelte.git",
+    "directory": "packages/svelte"
   },
+  "bugs": {
+    "url": "https://github.com/sveltejs/svelte/issues"
+  },
+  "homepage": "https://svelte.dev",
+  "keywords": [
+    "UI",
+    "framework",
+    "templates",
+    "templating"
+  ],
   "scripts": {
-    "build": "pnpm -r --filter=./packages/* build",
-    "build:sites": "pnpm -r --filter=./sites/* build",
-    "preview-site": "npm run build --prefix sites/svelte-5-preview",
-    "check": "cd packages/svelte && pnpm build && cd ../../ && pnpm -r check",
-    "lint": "pnpm -r lint && prettier --check documentation",
-    "format": "pnpm -r format && prettier --check --write documentation",
-    "test": "vitest run",
-    "test-output": "vitest run --coverage --reporter=json --outputFile=sites/svelte-5-preview/src/routes/status/results.json",
-    "changeset:version": "changeset version && pnpm -r generate:version && git add --all",
-    "changeset:publish": "changeset publish",
-    "bench": "node --allow-natives-syntax ./benchmarking/run.js",
-    "bench:compare": "node --allow-natives-syntax ./benchmarking/compare/index.js",
-    "bench:debug": "node --allow-natives-syntax --inspect-brk ./benchmarking/run.js"
+    "build": "node scripts/process-messages && rollup -c && pnpm generate:types && node scripts/check-treeshakeability.js",
+    "dev": "node scripts/process-messages && rollup -cw",
+    "check": "tsc && cd ./tests/types && tsc",
+    "check:watch": "tsc --watch",
+    "generate:version": "node ./scripts/generate-version.js",
+    "generate:types": "node ./scripts/generate-types.js && tsc -p tsconfig.generated.json",
+    "prepublishOnly": "pnpm build",
+    "format": "prettier --check --write .",
+    "lint": "prettier --check . && eslint",
+    "knip": "knip"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
-    "@sveltejs/eslint-config": "^7.0.1",
-    "@svitejs/changesets-changelog-github-compact": "^1.1.0",
-    "@types/node": "^20.11.5",
-    "@vitest/coverage-v8": "^1.2.1",
-    "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3",
-    "eslint": "^9.0.0",
-    "eslint-plugin-lube": "^0.4.3",
-    "jsdom": "22.0.0",
-    "playwright": "^1.41.1",
-    "prettier": "^3.2.4",
-    "prettier-plugin-svelte": "^3.1.2",
-    "typescript": "^5.5.2",
-    "typescript-eslint": "^8.0.0-alpha.20",
-    "v8-natives": "^1.2.5",
-    "vitest": "^1.2.1"
+    "@jridgewell/trace-mapping": "^0.3.22",
+    "@playwright/test": "^1.35.1",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-virtual": "^3.0.2",
+    "@types/aria-query": "^5.0.4",
+    "dts-buddy": "^0.4.7",
+    "esbuild": "^0.19.11",
+    "knip": "^4.2.1",
+    "rollup": "^4.9.5",
+    "source-map": "^0.7.4",
+    "tiny-glob": "^0.2.9"
   },
-  "pnpm": {
-    "overrides": {
-      "jimp>xml2js": "^0.6.0"
-    }
+  "dependencies": {
+    "@ampproject/remapping": "^2.2.1",
+    "@jridgewell/sourcemap-codec": "^1.4.15",
+    "@types/estree": "^1.0.5",
+    "acorn": "^8.11.3",
+    "acorn-typescript": "^1.4.13",
+    "aria-query": "^5.3.0",
+    "axobject-query": "^4.0.0",
+    "esm-env": "^1.0.0",
+    "esrap": "^1.2.2",
+    "is-reference": "^3.0.2",
+    "locate-character": "^3.0.0",
+    "magic-string": "^0.30.5",
+    "zimmerframe": "^1.1.2"
+  },
+  "knip": {
+    "entry": [
+      "src/*/index.js",
+      "src/index-client.ts",
+      "src/index-server.ts",
+      "src/index.d.ts"
+    ],
+    "project": [
+      "src/**"
+    ]
   }
 }

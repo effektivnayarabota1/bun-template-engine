@@ -1,26 +1,15 @@
-# Dependency directories
-node_modules/
+/types/*.map
+/types/compiler
+/compiler/index.js
 
-# IDE related
-.idea
+/action.d.ts
+/animate.d.ts
+/compiler.d.ts
+/easing.d.ts
+/index.d.ts
+/legacy.d.ts
+/motion.d.ts
+/store.d.ts
+/transition.d.ts
 
-# Test coverage
-coverage
-*.lcov
-
-# Optional eslint cache
-.eslintcache
-
-# dotenv environment variables file
-.env
-.env.test
-
-# build output
-.vercel
-
-# OS-specific
-.DS_Store
-
-tmp
-
-benchmarking/compare/.results
+/scripts/_bundle.js

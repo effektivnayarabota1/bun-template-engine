@@ -1,5 +1,0 @@
-{
-	"search.exclude": {
-		"sites/svelte-5-preview/static/*": true
-	}
-}
