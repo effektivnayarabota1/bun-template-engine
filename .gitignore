@@ -1,15 +1,18 @@
-/types/*.map
+*.map
+/src/compiler/compile/internal_exports.js
+/compiler.cjs
+/scratch/
+/test/*/samples/_
+/test/runtime/shards
+_actual*.*
+_output
 /types/compiler
-/compiler/index.js
 
 /action.d.ts
 /animate.d.ts
 /compiler.d.ts
 /easing.d.ts
 /index.d.ts
-/legacy.d.ts
 /motion.d.ts
 /store.d.ts
 /transition.d.ts
-
-/scripts/_bundle.js

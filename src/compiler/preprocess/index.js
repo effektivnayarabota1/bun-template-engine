@@ -3,21 +3,27 @@ import {
 	MappedCode,
 	parse_attached_sourcemap,
 	sourcemap_add_offset,
-	combine_sourcemaps,
-	get_basename
+	combine_sourcemaps
 } from '../utils/mapped_code.js';
 import { decode_map } from './decode_sourcemap.js';
 import { replace_in_code, slice_source } from './replace_in_code.js';
 
+const regex_filepath_separator = /[/\\]/;
+
+/**
+ * @param {string} filename
+ */
+function get_file_basename(filename) {
+	return filename.split(regex_filepath_separator).pop();
+}
+
 /**
  * Represents intermediate states of the preprocessing.
- * Implements the Source interface.
  */
 class PreprocessResult {
 	/** @type {string} */
 	source;
-
-	/** @type {string | undefined} The filename passed as-is to preprocess */
+	/** @type {string | undefined} */
 	filename;
 
 	// sourcemap_list is sorted in reverse order from last map (index 0) to first map (index -1)
@@ -37,16 +43,17 @@ class PreprocessResult {
 	dependencies = [];
 
 	/**
-	 * @type {string | null} last part of the filename, as used for `sources` in sourcemaps
+	 * @type {string}
 	 */
-	file_basename = /** @type {any} */ (undefined);
+	file_basename = undefined;
 
 	/**
 	 * @type {ReturnType<typeof getLocator>}
 	 */
-	get_location = /** @type {any} */ (undefined);
+	get_location = undefined;
 
 	/**
+	 *
 	 * @param {string} source
 	 * @param {string} [filename]
 	 */
@@ -55,7 +62,7 @@ class PreprocessResult {
 		this.filename = filename;
 		this.update_source({ string: source });
 		// preprocess source must be relative to itself or equal null
-		this.file_basename = filename == null ? null : get_basename(filename);
+		this.file_basename = filename == null ? null : get_file_basename(filename);
 	}
 
 	/**
@@ -79,7 +86,6 @@ class PreprocessResult {
 	 */
 	to_processed() {
 		// Combine all the source maps for each preprocessor function into one
-		// @ts-expect-error TODO there might be a bug in hiding here
 		const map = combine_sourcemaps(this.file_basename, this.sourcemap_list);
 		return {
 			// TODO return separated output, in future version where svelte.compile supports it:
@@ -88,7 +94,6 @@ class PreprocessResult {
 			// markup { code: markupCode, map: markupMap },
 			code: this.source,
 			dependencies: [...new Set(this.dependencies)],
-			// @ts-expect-error TODO there might be a bug in hiding here
 			map,
 			toString: () => this.source
 		};
@@ -105,13 +110,13 @@ function processed_content_to_code(processed, location, file_basename) {
 	// Convert the preprocessed code and its sourcemap to a MappedCode
 
 	/**
-	 * @type {import('@ampproject/remapping').DecodedSourceMap | undefined}
+	 * @type {import('@ampproject/remapping').DecodedSourceMap}
 	 */
-	let decoded_map = undefined;
+	let decoded_map;
 	if (processed.map) {
 		decoded_map = decode_map(processed);
 		// decoded map may not have sources for empty maps like `{ mappings: '' }`
-		if (decoded_map?.sources) {
+		if (decoded_map.sources) {
 			// offset only segments pointing at original component source
 			const source_index = decoded_map.sources.indexOf(file_basename);
 			if (source_index !== -1) {
@@ -221,7 +226,7 @@ function parse_tag_attributes(str) {
 	/** @type {Record<string, string | boolean>} */
 	const attrs = {};
 
-	/** @type {RegExpMatchArray | null} */
+	/** @type {RegExpMatchArray} */
 	let match;
 	while ((match = attribute_pattern.exec(str)) !== null) {
 		const name = match[1];
@@ -248,9 +253,9 @@ function stringify_tag_attributes(attributes) {
 }
 
 const regex_style_tags =
-	/<!--[^]*?-->|<style((?:\s+[^=>'"/\s]+=(?:"[^"]*"|'[^']*'|[^>\s]+)|\s+[^=>'"/\s]+)*\s*)(?:\/>|>([\S\s]*?)<\/style>)/g;
+	/<!--[^]*?-->|<style((?:\s+[^=>'"\/\s]+=(?:"[^"]*"|'[^']*'|[^>\s]+)|\s+[^=>'"\/\s]+)*\s*)(?:\/>|>([\S\s]*?)<\/style>)/g;
 const regex_script_tags =
-	/<!--[^]*?-->|<script((?:\s+[^=>'"/\s]+=(?:"[^"]*"|'[^']*'|[^>\s]+)|\s+[^=>'"/\s]+)*\s*)(?:\/>|>([\S\s]*?)<\/script>)/g;
+	/<!--[^]*?-->|<script((?:\s+[^=>'"\/\s]+=(?:"[^"]*"|'[^']*'|[^>\s]+)|\s+[^=>'"\/\s]+)*\s*)(?:\/>|>([\S\s]*?)<\/script>)/g;
 
 /**
  * Calculate the updates required to process all instances of the specified tag.
@@ -312,7 +317,7 @@ async function process_markup(process, source) {
 			string: processed.code,
 			map: processed.map
 				? // TODO: can we use decode_sourcemap?
-					typeof processed.map === 'string'
+				  typeof processed.map === 'string'
 					? JSON.parse(processed.map)
 					: processed.map
 				: undefined,
@@ -349,15 +354,12 @@ export default async function preprocess(source, preprocessor, options) {
 	// to make debugging easier = detect low-resolution sourcemaps in fn combine_mappings
 	for (const preprocessor of preprocessors) {
 		if (preprocessor.markup) {
-			// @ts-expect-error TODO there might be a bug in hiding here
 			result.update_source(await process_markup(preprocessor.markup, result));
 		}
 		if (preprocessor.script) {
-			// @ts-expect-error TODO there might be a bug in hiding here
 			result.update_source(await process_tag('script', preprocessor.script, result));
 		}
 		if (preprocessor.style) {
-			// @ts-expect-error TODO there might be a bug in hiding here
 			result.update_source(await process_tag('style', preprocessor.style, result));
 		}
 	}

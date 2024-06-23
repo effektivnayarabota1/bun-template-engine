@@ -3,7 +3,7 @@ import fs from 'node:fs';
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 
 fs.writeFileSync(
-	'./src/version.js',
+	'./src/shared/version.js',
 	`// generated during release, do not modify
 
 /**

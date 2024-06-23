@@ -1,5 +1,0 @@
-	div.svelte-xyz {
-		&.class{
-			color: red;
-		}
-	}
