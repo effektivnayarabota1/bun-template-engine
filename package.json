@@ -1,7 +1,7 @@
 {
-  "name": "svelte",
-  "version": "4.2.18",
-  "description": "Cybernetically enhanced web apps",
+  "name": "bun-template-engine",
+  "version": "0.0.0",
+  "description": "simpler",
   "type": "module",
   "module": "src/runtime/index.js",
   "main": "src/runtime/index.js",
