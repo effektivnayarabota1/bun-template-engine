@@ -4,37 +4,37 @@ import { getLocator } from "locate-character";
 import is_reference from "is-reference";
 import { print, b } from "code-red";
 
-import { reserved, is_valid } from "../../utils/names.js";
-import globals from "../../utils/globals.js";
-import { namespaces, valid_namespaces } from "../../utils/namespaces.js";
-import create_module from "../create_module.js";
+import { reserved, is_valid } from "../../../utils/names.js";
+import globals from "../../../utils/globals.js";
+import { namespaces, valid_namespaces } from "../../../utils/namespaces.js";
+import create_module from "../../create_module.js";
 import {
   create_scopes,
   extract_names,
   extract_identifiers,
-} from "../utils/scope.js";
-import Stylesheet from "../css/Stylesheet.js";
-import Fragment from "../nodes/Fragment.js";
-import internal_exports from "../internal_exports.js";
-import error from "../../utils/error.js";
-import get_code_frame from "../../utils/get_code_frame.js";
-import flatten_reference from "../utils/flatten_reference.js";
-import is_used_as_reference from "../utils/is_used_as_reference.js";
-import fuzzymatch from "../../utils/fuzzymatch.js";
-import get_object from "../utils/get_object.js";
-import add_to_set from "../utils/add_to_set.js";
-import check_graph_for_cycles from "../utils/check_graph_for_cycles.js";
-import { is_reserved_keyword } from "../utils/reserved_keywords.js";
-import { apply_preprocessor_sourcemap } from "../../utils/mapped_code.js";
-import { clone } from "../../utils/clone.js";
-import compiler_warnings from "../compiler_warnings.js";
-import compiler_errors from "../compiler_errors.js";
+} from "../../utils/scope.js";
+import Stylesheet from "../../css/Stylesheet.js";
+import Fragment from "../../nodes/Fragment.js";
+import internal_exports from "../../internal_exports.js";
+import error from "../../../utils/error.js";
+import get_code_frame from "../../../utils/get_code_frame.js";
+import flatten_reference from "../../utils/flatten_reference.js";
+import is_used_as_reference from "../../utils/is_used_as_reference.js";
+import fuzzymatch from "../../../utils/fuzzymatch.js";
+import get_object from "../../utils/get_object.js";
+import add_to_set from "../../utils/add_to_set.js";
+import check_graph_for_cycles from "../../utils/check_graph_for_cycles.js";
+import { is_reserved_keyword } from "../../utils/reserved_keywords.js";
+import { apply_preprocessor_sourcemap } from "../../../utils/mapped_code.js";
+import { clone } from "../../../utils/clone.js";
+import compiler_warnings from "../../compiler_warnings.js";
+import compiler_errors from "../../compiler_errors.js";
 import {
   extract_ignores_above_position,
   extract_svelte_ignore_from_comments,
-} from "../../utils/extract_svelte_ignore.js";
-import check_enable_sourcemap from "../utils/check_enable_sourcemap.js";
-import { VERSION } from "../../../shared/version.js";
+} from "../../../utils/extract_svelte_ignore.js";
+import check_enable_sourcemap from "../../utils/check_enable_sourcemap.js";
+import { VERSION } from "../../../../shared/version.js";
 
 const regex_leading_directory_separator = /^[/\\]/;
 const regex_starts_with_term_export = /^Export/;

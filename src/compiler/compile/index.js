@@ -1,4 +1,4 @@
-import { Component } from "./models/component.model.js";
+import { Component } from "./models/component/index.js";
 import { renderSsr } from "./render-ssr/index.js";
 import parse from "../parse/index.js";
 import fuzzymatch from "../utils/fuzzymatch.js";
