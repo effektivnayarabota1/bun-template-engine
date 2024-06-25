@@ -40,176 +40,66 @@ const regex_leading_directory_separator = /^[/\\]/;
 const regex_starts_with_term_export = /^Export/;
 const regex_contains_term_function = /Function/;
 
-export default class Component {
-  /** @type {import('../Stats.js').default} */
-  // stats;
-
-  /** @type {import('../interfaces.js').Warning[]} */
+export class Component {
   warnings;
-
-  /** @type {Set<string>} */
   ignores;
-
-  /** @type {Array<Set<string>>} */
   ignore_stack = [];
-
-  /** @type {import('../interfaces.js').Ast} */
   ast;
-
-  /** @type {import('../interfaces.js').Ast} */
   original_ast;
-
-  /** @type {string} */
   source;
-
-  /** @type {import('estree').Identifier} */
   name;
-
-  /** @type {import('../interfaces.js').CompileOptions} */
   compile_options;
-
-  /** @type {import('./nodes/Fragment.js').default} */
   fragment;
-
-  /** @type {import('./utils/scope.js').Scope} */
   module_scope;
-
-  /** @type {import('./utils/scope.js').Scope} */
   instance_scope;
-
-  /** @type {WeakMap<import('estree').Node, import('./utils/scope.js').Scope>} */
   instance_scope_map;
-
-  /** @type {ComponentOptions} */
   component_options;
-
-  /** @type {string} */
   namespace;
-
-  /** @type {string} */
   tag;
-
-  /** @type {boolean} */
   accessors;
-
-  /** @type {import('../interfaces.js').Var[]} */
   vars = [];
-
-  /** @type {Map<string, import('../interfaces.js').Var>} */
   var_lookup = new Map();
-
-  /** @type {import('estree').ImportDeclaration[]} */
   imports = [];
-
-  /** @type {import('estree').ExportNamedDeclaration[]} */
   exports_from = [];
-
-  /** @type {import('estree').ExportNamedDeclaration[]} */
   instance_exports_from = [];
-
-  /** @type {Set<import('estree').Node>} */
   hoistable_nodes = new Set();
-
-  /** @type {Map<string, import('estree').Node>} */
   node_for_declaration = new Map();
-
-  /** @type {Array<import('estree').Node | import('estree').Node[]>} */
   partly_hoisted = [];
-
-  /** @type {Array<import('estree').Node | import('estree').Node[]>} */
   fully_hoisted = [];
-  /**
-   * @type {Array<{
-   * 		assignees: Set<string>;
-   * 		dependencies: Set<string>;
-   * 		node: import('estree').Node;
-   * 		declaration: import('estree').Node;
-   * 	}>}
-   */
   reactive_declarations = [];
-
-  /** @type {Set<import('estree').Node>} */
   reactive_declaration_nodes = new Set();
-  /** */
   has_reactive_assignments = false;
-
-  /** @type {Set<string>} */
   injected_reactive_declaration_vars = new Set();
-
-  /** @type {Map<string, import('estree').Identifier>} */
   helpers = new Map();
-
-  /** @type {Map<string, import('estree').Identifier>} */
   globals = new Map();
-
-  /** @type {Map<string, Set<string>>} */
   indirect_dependencies = new Map();
-
-  /** @type {string} */
   file;
-
-  /**
-   * Use this for stack traces. It is 1-based and acts on pre-processed sources.
-   * Use `meta_locate` for metadata on DOM elements.
-   * @type {(c: number) => { line: number; column: number }}
-   */
   locate;
-
-  /**
-   * Use this for metadata on DOM elements. It is 1-based and acts on sources that have not been pre-processed.
-   * Use `locate` for source mappings.
-   * @type {(c: number) => { line: number; column: number }}
-   */
   meta_locate;
-
-  /** @type {import('./nodes/Element.js').default[]} */
   elements = [];
-
-  /** @type {import('./css/Stylesheet.js').default} */
   stylesheet;
-
-  /** @type {Map<string, import('estree').Identifier>} */
   aliases = new Map();
-
-  /** @type {Set<string>} */
   used_names = new Set();
-
-  /** @type {Set<string>} */
   globally_used_names = new Set();
-
-  /** @type {Map<string, import('./nodes/Slot.js').default>} */
   slots = new Map();
-
-  /** @type {Set<string>} */
   slot_outlets = new Set();
-
-  /** @type {import('./nodes/shared/Tag.js').default[]} */
   tags = [];
 
-  /**
-   * @param {import('../interfaces.js').Ast} ast
-   * @param {string} source
-   * @param {string} name
-   * @param {import('../interfaces.js').CompileOptions} compile_options
-   * @param {import('../Stats.js').default} stats
-   * @param {import('../interfaces.js').Warning[]} warnings
-   */
-  // constructor(ast, source, name, compile_options, stats, warnings) {
   constructor(ast, source, name, compile_options, warnings) {
     this.name = { type: "Identifier", name };
-    // this.stats = stats;
     this.warnings = warnings;
     this.ast = ast;
     this.source = source;
+
     this.compile_options = compile_options;
-    // the instance JS gets mutated, so we park
-    // a copy here for later. TODO this feels gross
+
     this.original_ast = clone({
       html: ast.html,
       css: ast.css,
       instance: ast.instance,
       module: ast.module,
     });
+
     this.file =
       compile_options.filename &&
       (typeof process !== "undefined"

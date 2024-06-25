@@ -7,7 +7,6 @@ export const bteRuntimePlugin = plugin({
   name: "bteRuntimePlugin",
   async setup(build) {
     build.onLoad({ filter: /\.bte$/ }, async ({ path }) => {
-      console.log("onload");
       const bteFile = Bun.file(path);
       const bteFileText = await bteFile.text();
 
