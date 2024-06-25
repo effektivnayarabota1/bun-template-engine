@@ -6,17 +6,13 @@ import { walk } from "estree-walker";
 import { invalidate } from "../render_dom/invalidate.js";
 import check_enable_sourcemap from "../utils/check_enable_sourcemap.js";
 
-/**
- * @param {import('../Component.js').default} component
- * @param {import('../../interfaces.js').CompileOptions} options
- * @returns {{ js: import('estree').Node[]; css: import('../../interfaces.js').CssResult; }}
- */
 export const renderSsr = (component, options) => {
+  console.log(options);
+
   const renderer = new Renderer({
     name: component.name,
   });
   const { name } = component;
-  // create $$render function
   renderer.render(
     trim(component.fragment.children),
     Object.assign(
@@ -26,9 +22,7 @@ export const renderSsr = (component, options) => {
       options
     )
   );
-  // TODO put this inside the Renderer class
   const literal = renderer.pop();
-  // TODO concatenate CSS maps
   const css = options.customElement
     ? { code: null, map: null }
     : component.stylesheet.render(options.filename);
@@ -74,7 +68,6 @@ export const renderSsr = (component, options) => {
     }
     return b`let ${name}, ${`$$unsubscribe_${store_name}`};`;
   });
-  // instrument get/set store value
   if (component.ast.instance) {
     let scope = component.instance_scope;
     const map = component.instance_scope_map;
@@ -94,9 +87,7 @@ export const renderSsr = (component, options) => {
         ) {
           const assignee =
             node.type === "AssignmentExpression" ? node.left : node.argument;
-          const names = new Set(
-            extract_names(/** @type {import('estree').Node} */ (assignee))
-          );
+          const names = new Set(extract_names(assignee));
           const to_invalidate = new Set();
           for (const name of names) {
             const variable = component.var_lookup.get(name);
@@ -112,13 +103,7 @@ export const renderSsr = (component, options) => {
           }
           if (to_invalidate.size) {
             this.replace(
-              invalidate(
-                /** @type {any} */ ({ component }),
-                scope,
-                node,
-                to_invalidate,
-                true
-              )
+              invalidate({ component }, scope, node, to_invalidate, true)
             );
           }
         }
@@ -138,7 +123,6 @@ export const renderSsr = (component, options) => {
   const instance_javascript = component.extract_javascript(
     component.ast.instance
   );
-  // TODO only do this for props with a default value
   const parent_bindings = instance_javascript
     ? component.vars
         .filter((variable) => !variable.module && variable.export_name)
@@ -153,10 +137,9 @@ export const renderSsr = (component, options) => {
     return variable.injected;
   });
   const reactive_declarations = component.reactive_declarations.map((d) => {
-    const body = /** @type {import('estree').LabeledStatement} */ (d.node).body;
+    const body = d.node.body;
     let statement = b`${body}`;
     if (!d.declaration) {
-      // TODO do not add label if it's not referenced
       statement = b`$: { ${statement} }`;
     }
     return statement;
@@ -229,22 +212,17 @@ export const renderSsr = (component, options) => {
   return { js, css };
 };
 
-/** @param {import('../nodes/interfaces.js').INode[]} nodes */
 function trim(nodes) {
   let start = 0;
   for (; start < nodes.length; start += 1) {
-    const node = /** @type {import('../nodes/Text.js').default} */ (
-      nodes[start]
-    );
+    const node = nodes[start];
     if (node.type !== "Text") break;
     node.data = node.data.replace(/^\s+/, "");
     if (node.data) break;
   }
   let end = nodes.length;
   for (; end > start; end -= 1) {
-    const node = /** @type {import('../nodes/Text.js').default} */ (
-      nodes[end - 1]
-    );
+    const node = nodes[end - 1];
     if (node.type !== "Text") break;
     node.data = node.data.trimRight();
     if (node.data) break;

@@ -80,6 +80,10 @@ export const generateComponent = ({ componentData, result }) => {
       },
     });
 
+    // console.log(program.code)
+    // после этой функции я могу получить program.code
+    // нужно понять, как сюда попадает ssr компонент
+
     const referenced_globals = Array.from(
       componentData.globals,
       ([name, alias]) => name !== alias.name && { name, alias }
