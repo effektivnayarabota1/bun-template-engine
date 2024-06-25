@@ -258,13 +258,10 @@ export class Component {
     return alias;
   }
 
-  /**
-   * @param {{ js: import('estree').Node[]; css: import('../interfaces.js').CssResult }} [result]
-   * @returns {import('../interfaces.js').CompileResult}
-   */
   generate(result) {
     let js = null;
     let css = null;
+
     if (result) {
       const { compile_options, name } = this;
       const banner = `${
@@ -386,11 +383,6 @@ export class Component {
     };
   }
 
-  /**
-   * @param {string} name
-   * @param {import('./utils/scope.js').Scope} [scope]
-   * @returns {import('estree').Identifier}
-   */
   get_unique_name(name, scope) {
     let alias = name;
     for (
@@ -407,6 +399,7 @@ export class Component {
     this.used_names.add(alias);
     return { type: "Identifier", name: alias };
   }
+
   get_unique_name_maker() {
     const local_used_names = new Set();
 
@@ -418,10 +411,6 @@ export class Component {
     internal_exports.forEach(add);
     this.var_lookup.forEach((_value, key) => add(key));
 
-    /**
-     * @param {string} name
-     * @returns {import('estree').Identifier}
-     */
     return (name) => {
       let alias = name;
       for (
@@ -438,7 +427,6 @@ export class Component {
     };
   }
 
-  /** @returns {import('../interfaces.js').Var[]} */
   get_vars_report() {
     const { compile_options, vars } = this;
     const vars_report =
@@ -459,16 +447,7 @@ export class Component {
       referenced_from_script: v.referenced_from_script || false,
     }));
   }
-  /**
-   * @param {{
-   * 			start: number;
-   * 			end: number;
-   * 		}} pos
-   * @param {{
-   * 			code: string;
-   * 			message: string;
-   * 		}} e
-   */
+
   error(pos, e) {
     if (this.compile_options.errorMode === "warn") {
       this.warn(pos, e);
@@ -483,16 +462,7 @@ export class Component {
       });
     }
   }
-  /**
-   * @param {{
-   * 			start: number;
-   * 			end: number;
-   * 		}} pos
-   * @param {{
-   * 			code: string;
-   * 			message: string;
-   * 		}} warning
-   */
+
   warn(pos, warning) {
     if (this.ignores && this.ignores.has(warning.code)) {
       return;
@@ -513,15 +483,10 @@ export class Component {
     });
   }
 
-  /** @param {any} node */
   extract_imports(node) {
     this.imports.push(node);
   }
 
-  /**
-   * @param {any} node
-   * @param {any} module_script
-   */
   extract_exports(node, module_script = false) {
     const ignores = extract_svelte_ignore_from_comments(node);
     if (ignores.length) this.push_ignores(ignores);
@@ -530,11 +495,6 @@ export class Component {
     return result;
   }
 
-  /**
-   * @private
-   * @param {import('estree').ExportDefaultDeclaration | import('estree').ExportNamedDeclaration | import('estree').ExportAllDeclaration} node
-   * @param {boolean} module_script
-   */
   _extract_exports(node, module_script) {
     if (node.type === "ExportDefaultDeclaration") {
       return this.error(
@@ -614,7 +574,6 @@ export class Component {
     }
   }
 
-  /** @param {any} script */
   extract_javascript(script) {
     if (!script) return null;
     return script.content.body.filter((node) => {
@@ -627,6 +586,7 @@ export class Component {
       return true;
     });
   }
+
   walk_module_js() {
     const component = this;
     const script = this.ast.module;
@@ -642,6 +602,7 @@ export class Component {
         }
       },
     });
+
     const { scope, globals } = create_scopes(script.content);
     this.module_scope = scope;
     scope.declarations.forEach((node, name) => {
@@ -663,6 +624,7 @@ export class Component {
         imported,
       });
     });
+
     globals.forEach((node, name) => {
       if (name[0] === "$") {
         return this.error(
@@ -677,6 +639,7 @@ export class Component {
         });
       }
     });
+
     const { body } = script.content;
     let i = body.length;
     while (--i >= 0) {
@@ -695,6 +658,7 @@ export class Component {
       }
     }
   }
+
   walk_instance_js_pre_template() {
     const script = this.ast.instance;
     if (!script) return;
@@ -736,8 +700,7 @@ export class Component {
       });
       this.node_for_declaration.set(name, node);
     });
-    // NOTE: add store variable first, then only $store value
-    // as `$store` will mark `store` variable as referenced and subscribable
+
     const global_keys = Array.from(globals.keys());
     const sorted_globals = [
       ...global_keys.filter((key) => key[0] !== "$"),
@@ -805,21 +768,14 @@ export class Component {
     let scope = instance_scope;
     const to_remove = [];
 
-    /**
-     * @param {any} parent
-     * @param {any} prop
-     * @param {any} index
-     */
     const remove = (parent, prop, index) => {
       to_remove.unshift([parent, prop, index]);
     };
     let scope_updated = false;
     const current_function_stack = [];
 
-    /** @type {import('estree').FunctionDeclaration | import('estree').FunctionExpression} */
     let current_function = null;
     walk(content, {
-      /** @type {import('estree-walker').SyncHandler} */
       enter(node, parent, prop, index) {
         if (
           node.type === "FunctionDeclaration" ||
@@ -837,10 +793,6 @@ export class Component {
         if (node.type === "AssignmentExpression") {
           if (node.left.type === "ArrayPattern") {
             walk(node.left, {
-              /**
-               * @param {import('estree').Node} node
-               * @param {import('estree').Node} parent
-               */
               enter(node, parent) {
                 if (
                   node.type === "Identifier" &&
@@ -910,7 +862,6 @@ export class Component {
         );
       },
 
-      /** @param {import('estree').Node} node */
       leave(node) {
         if (
           node.type === "FunctionDeclaration" ||
@@ -920,7 +871,6 @@ export class Component {
           current_function =
             current_function_stack[current_function_stack.length - 1];
         }
-        // do it on leave, to prevent infinite loop
         if (
           component.compile_options.dev &&
           component.compile_options.loopGuardTimeout > 0 &&
