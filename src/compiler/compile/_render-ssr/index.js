@@ -7,12 +7,12 @@ import { invalidate } from "../render_dom/invalidate.js";
 import check_enable_sourcemap from "../utils/check_enable_sourcemap.js";
 
 export const renderSsr = (component, options) => {
-  console.log(options);
-
   const renderer = new Renderer({
     name: component.name,
   });
+
   const { name } = component;
+
   renderer.render(
     trim(component.fragment.children),
     Object.assign(

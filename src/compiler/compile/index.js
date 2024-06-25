@@ -1,5 +1,5 @@
 import { Component } from "./models/component/index.js";
-import { renderSsr } from "./render-ssr/index.js";
+import { renderSsr } from "./ssr/index.js";
 import parse from "../parse/index.js";
 import fuzzymatch from "../utils/fuzzymatch.js";
 import get_name_from_filename from "./utils/get_name_from_filename.js";
@@ -135,7 +135,41 @@ export const compile = (source, options = {}) => {
     warnings
   );
 
+  // *** НЕ РЕНДЕР SSR!!!
+
+  // renderBody
+  // renderHead
+  // renderCss
+  // ??renderJs
+
+  // а еще лучше, пере тем, как недерить - разделить шаблон на эти куски
+  // и отправлять на реднер только если один из кусков есть!
+
   const result = renderSsr(component, options);
+
+  console.log(result);
+
+  // почему я тут получаю готовый css, а для того, чтобы получить html
+  // нужно закидывать результат в generate?
+  // вынеси этот функционал на один уровень, сделать асинхронно и последовательно
+
+  // bteToCss
+  // bteToHtml
+  // bteToHead
+
+  // При этом нужно, чтобы функции свелт выполнялись в штатном.
+  // 	типо slot и в целом, скрипты в script
+
+  // if else
+  // работа с массивами,
+  // прокидывание пропсов
+
+  // нужно вытащить из generate скрипт, который
+  // делает из js html и поместить его в
+  // renderSsr.
+
+  // на выходе я хочу получать две строки:
+  // html и css
 
   return component.generate(result);
 };
