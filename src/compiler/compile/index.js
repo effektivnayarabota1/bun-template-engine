@@ -1,6 +1,4 @@
-// import Stats from "../Stats.js";
 import parse from "../parse/index.js";
-import render_dom from "./render_dom/index.js";
 import { renderSsr } from "./render-ssr/index.js";
 import Component from "./Component.js";
 import fuzzymatch from "../utils/fuzzymatch.js";
@@ -119,44 +117,25 @@ function validate_options(options, warnings) {
   }
 }
 
-/**
- * `compile` takes your component source code, and turns it into a JavaScript module that exports a class.
- *
- * https://svelte.dev/docs/svelte-compiler#svelte-compile
- * @param {string} source
- * @param {import('../interfaces.js').CompileOptions} options
- */
 export const compile = (source, options = {}) => {
   options = Object.assign(
     { generate: "dom", dev: false, enableSourcemap: true, css: "injected" },
     options
   );
 
-  // const stats = new Stats();
   const warnings = [];
   validate_options(options, warnings);
-  // stats.start("parse");
   const ast = parse(source, options);
-  // stats.stop("parse");
-  // stats.start("create component");
 
   const component = new Component(
     ast,
     source,
     options.name || get_name_from_filename(options.filename) || "Component",
     options,
-    // stats,
     warnings
   );
 
-  // stats.stop("create component");
-
-  const result =
-    options.generate === false
-      ? null
-      : options.generate === "ssr"
-      ? renderSsr(component, options)
-      : render_dom(component, options);
+  const result = renderSsr(component, options);
 
   return component.generate(result);
 };
