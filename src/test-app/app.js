@@ -1,9 +1,9 @@
-import IndexBte from "../templates/index.bte";
+import PrimaryBte from "../templates/primary.bte";
 
 export const testApp = async () => {
   const server = Bun.serve({
     fetch(req) {
-      console.log(IndexBte.render());
+      console.log(PrimaryBte.render());
       return new Response(Bun.file("./src/templates/index.html"));
     },
   });

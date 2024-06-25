@@ -15,10 +15,8 @@ export const bteRuntimePlugin = plugin({
         generate: "ssr",
       });
 
-      const jsString = result.js.code;
-
       return {
-        contents: jsString,
+        contents: result,
         loader: "js",
       };
     });
