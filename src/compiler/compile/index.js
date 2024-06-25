@@ -1,7 +1,7 @@
-import Stats from "../Stats.js";
+// import Stats from "../Stats.js";
 import parse from "../parse/index.js";
 import render_dom from "./render_dom/index.js";
-import render_ssr from "./render_ssr/index.js";
+import { renderSsr } from "./render-ssr/index.js";
 import Component from "./Component.js";
 import fuzzymatch from "../utils/fuzzymatch.js";
 import get_name_from_filename from "./utils/get_name_from_filename.js";
@@ -126,32 +126,37 @@ function validate_options(options, warnings) {
  * @param {string} source
  * @param {import('../interfaces.js').CompileOptions} options
  */
-export default function compile(source, options = {}) {
+export const compile = (source, options = {}) => {
   options = Object.assign(
     { generate: "dom", dev: false, enableSourcemap: true, css: "injected" },
     options
   );
-  const stats = new Stats();
+
+  // const stats = new Stats();
   const warnings = [];
   validate_options(options, warnings);
-  stats.start("parse");
+  // stats.start("parse");
   const ast = parse(source, options);
-  stats.stop("parse");
-  stats.start("create component");
+  // stats.stop("parse");
+  // stats.start("create component");
+
   const component = new Component(
     ast,
     source,
     options.name || get_name_from_filename(options.filename) || "Component",
     options,
-    stats,
+    // stats,
     warnings
   );
-  stats.stop("create component");
+
+  // stats.stop("create component");
+
   const result =
     options.generate === false
       ? null
       : options.generate === "ssr"
-      ? render_ssr(component, options)
+      ? renderSsr(component, options)
       : render_dom(component, options);
+
   return component.generate(result);
-}
+};
