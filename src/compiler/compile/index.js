@@ -1,5 +1,5 @@
 import { Component } from "./models/component/index.js";
-import { renderSsr } from "./ssr/index.js";
+import { renderSsr } from "./render/index.render.js";
 import parse from "../parse/index.js";
 import fuzzymatch from "../utils/fuzzymatch.js";
 import get_name_from_filename from "./utils/get_name_from_filename.js";
@@ -146,8 +146,9 @@ export const compile = (source, options = {}) => {
   // и отправлять на реднер только если один из кусков есть!
 
   const result = renderSsr(component, options);
-
   console.log(result);
+
+  process.exit();
 
   // почему я тут получаю готовый css, а для того, чтобы получить html
   // нужно закидывать результат в generate?
@@ -171,5 +172,5 @@ export const compile = (source, options = {}) => {
   // на выходе я хочу получать две строки:
   // html и css
 
-  return component.generate(result);
+  // return component.generate(result);
 };

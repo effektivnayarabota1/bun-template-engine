@@ -30,16 +30,20 @@ export const renderSsr = (component, options) => {
   const props = component.vars.filter(
     (variable) => !variable.module && variable.export_name
   );
+
   const rest = uses_rest
     ? b`let $$restProps = @compute_rest_props($$props, [${props
         .map((prop) => `"${prop.export_name}"`)
         .join(",")}]);`
     : null;
+
   const uses_slots = component.var_lookup.has("$$slots");
   const slots = uses_slots ? b`let $$slots = @compute_slots(#slots);` : null;
+
   const reactive_stores = component.vars.filter(
     (variable) => variable.name[0] === "$" && variable.name[1] !== "$"
   );
+
   const reactive_store_subscriptions = reactive_stores
     .filter((store) => {
       const variable = component.var_lookup.get(store.name.slice(1));
@@ -55,9 +59,11 @@ export const renderSsr = (component, options) => {
 				${`$$unsubscribe_${store_name}`} = @subscribe(${store_name}, #value => ${name} = #value)
 			`;
     });
+
   const reactive_store_unsubscriptions = reactive_stores.map(
     ({ name }) => b`${`$$unsubscribe_${name.slice(1)}`}()`
   );
+
   const reactive_store_declarations = reactive_stores.map(({ name }) => {
     const store_name = name.slice(1);
     const store = component.var_lookup.get(store_name);
@@ -68,6 +74,7 @@ export const renderSsr = (component, options) => {
     }
     return b`let ${name}, ${`$$unsubscribe_${store_name}`};`;
   });
+
   if (component.ast.instance) {
     let scope = component.instance_scope;
     const map = component.instance_scope_map;
@@ -171,6 +178,7 @@ export const renderSsr = (component, options) => {
 			${reactive_store_unsubscriptions}
 
 			return ${literal};`;
+
   const blocks = [
     ...injected.map((name) => b`let ${name};`),
     rest,
@@ -182,6 +190,7 @@ export const renderSsr = (component, options) => {
     css.code && b`$$result.css.add(#css);`,
     main,
   ].filter(Boolean);
+
   const css_sourcemap_enabled = check_enable_sourcemap(
     options.enableSourcemap,
     "css"

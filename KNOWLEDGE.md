@@ -1,0 +1,2 @@
+- component.ast - возвращает объект с html, css и js
+- svelte v3 `7382a9f81`
