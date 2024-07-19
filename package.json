@@ -1,0 +1,18 @@
+{
+  "name": "bun-template-engine",
+  "version": "0.0.0",
+  "description": "much simpler",
+  "type": "module",
+  "keywords": [
+    "UI",
+    "framework",
+    "templates",
+    "templating"
+  ],
+  "scripts": {
+    "dev": "bun --watch ./src/scripts/test-app.script.js",
+    "start": "NODE_ENV=production bun ./src/scripts/test-app.script.js"
+  },
+  "author": "effectivnayarabota1",
+  "license": "MIT"
+}

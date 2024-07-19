@@ -1,0 +1,13 @@
+<script>
+	import SecondaryBte from './secondary.bte'
+  console.log("bte template console log");
+</script>
+
+<h2 class="bte-header">bte template</h2>
+<SecondaryBte/>
+
+<style>
+  .bte-header {
+    color: "red";
+  }
+</style>

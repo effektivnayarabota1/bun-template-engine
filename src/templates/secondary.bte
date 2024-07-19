@@ -1,0 +1,11 @@
+<script>
+  console.log("bte template console log");
+</script>
+
+<h2 class="bte-header">secondary bte template</h2>
+
+<style>
+  .bte-header {
+    color: "blue";
+  }
+</style>
