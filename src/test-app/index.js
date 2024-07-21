@@ -1,2 +1,1 @@
-import { testApp } from "./app.js";
-export { testApp };
+export * from "./app.js";

@@ -1,4 +1,4 @@
-// import { b } from "code-red";
+import { b } from "code-red";
 // import { string_literal } from "../utils/stringify.js";
 // import { extract_names } from "periscopic";
 // import { walk } from "estree-walker";
@@ -132,28 +132,27 @@ export const renderSsr = (component, options) => {
 
   // TODO
   // getJs
-  //   const js = b`
-  // 	${
-  //       css.code
-  //         ? b`
-  // 	const #css = {
-  // 		code: "${css.code}",
-  // 	};`
-  //         : null
-  //     }
-  // 	${component.extract_javascript(component.ast.module)}
-  //
-  // 	${component.fully_hoisted}
-  //
-  // 	const ${name} = @create_ssr_component(($$result, $$props, $$bindings, #slots) => {
-  // 		${blocks}
-  // 	});
-  // `;
+  const js = b`
+  	${
+      css.code
+        ? b`
+  	const #css = {
+  		code: "${css.code}",
+  	};`
+        : null
+    }
+  	${component.extract_javascript(component.ast.module)}
+  
+  	${component.fully_hoisted}
+  
+  	const ${name} = @create_ssr_component(($$result, $$props, $$bindings, #slots) => {
+  		${blocks}
+  	});
+  `;
+
+  // в каком виде здесть сохраняется JS?
 
   // ***
 
-  //   console.log(js);
-  //   console.log(css);
-  //
-  //   return { js, css };
+  return { js, css };
 };

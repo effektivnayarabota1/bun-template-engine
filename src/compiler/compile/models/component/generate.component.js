@@ -80,10 +80,6 @@ export const generateComponent = ({ componentData, result }) => {
       },
     });
 
-    // console.log(program.code)
-    // после этой функции я могу получить program.code
-    // нужно понять, как сюда попадает ssr компонент
-
     const referenced_globals = Array.from(
       componentData.globals,
       ([name, alias]) => name !== alias.name && { name, alias }
@@ -117,6 +113,16 @@ export const generateComponent = ({ componentData, result }) => {
         })),
       componentData.exports_from
     );
+
+    // program - это просто набор нод
+    // в create ssr component этот массив превращается после функции PRINT
+
+    console.log("* program: ");
+    console.log(program.body[2].declarations[0].init);
+
+    // print собирает строку из тех нод, что в неё помещают!
+    // в текущем случает у нас четыре ноды - импорт, объявление css,
+    // 	объявление компонента (create_ssr_component) и экспорт компонента
 
     output = print(program);
   }

@@ -10,13 +10,16 @@ export const bteRuntimePlugin = plugin({
       const bteFile = Bun.file(path);
       const bteFileText = await bteFile.text();
 
-      const result = compile(bteFileText, {
+      const compileResult = compile(bteFileText, {
         filename: path,
         generate: "ssr",
       });
 
+      console.log("result on plugin: ");
+      console.log(compileResult);
+
       return {
-        contents: result,
+        contents: compileResult,
         loader: "js",
       };
     });

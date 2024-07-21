@@ -1,3 +1,5 @@
+import { b } from "code-red";
+
 export const mainHelper = ({
   renderer,
   reactive_declarations,

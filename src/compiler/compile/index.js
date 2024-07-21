@@ -145,10 +145,7 @@ export const compile = (source, options = {}) => {
   // а еще лучше, пере тем, как недерить - разделить шаблон на эти куски
   // и отправлять на реднер только если один из кусков есть!
 
-  const result = renderSsr(component, options);
-  console.log(result);
-
-  process.exit();
+  const renderSsrResult = renderSsr(component, options);
 
   // почему я тут получаю готовый css, а для того, чтобы получить html
   // нужно закидывать результат в generate?
@@ -172,5 +169,7 @@ export const compile = (source, options = {}) => {
   // на выходе я хочу получать две строки:
   // html и css
 
-  // return component.generate(result);
+  const output = component.generate(renderSsrResult);
+
+  return output;
 };

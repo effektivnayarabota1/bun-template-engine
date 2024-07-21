@@ -4,15 +4,29 @@
   "description": "much simpler",
   "type": "module",
   "keywords": [
-    "UI",
-    "framework",
     "templates",
     "templating"
+  ],
+  "workspaces": [
+    "src/packages/**/*"
   ],
   "scripts": {
     "dev": "bun --watch ./src/scripts/test-app.script.js",
     "start": "NODE_ENV=production bun ./src/scripts/test-app.script.js"
   },
   "author": "effectivnayarabota1",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@ampproject/remapping": "^2.3.0",
+    "@jridgewell/trace-mapping": "^0.3.25",
+    "acorn": "^8.12.1",
+    "aria-query": "^5.3.0",
+    "axobject-query": "^4.1.0",
+    "code-red": "^1.0.4",
+    "css-tree": "^2.3.1",
+    "locate-character": "^3.0.0",
+    "magic-string": "^0.30.10",
+    "periscopic": "^4.0.2",
+    "svelte/internal": "./src/packages/svelte_internal"
+  }
 }

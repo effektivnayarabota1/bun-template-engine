@@ -1,0 +1,8 @@
+{
+  "name": "svelte/internal",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  }
+}

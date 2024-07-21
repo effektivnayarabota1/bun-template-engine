@@ -1,0 +1,11 @@
+<script>
+	console.log('that script should be runned on server console')
+</script>
+
+<h1>that text should be renered on the browser</h1>
+
+<style>
+	h1 {
+		color: 'red'
+	}
+</style>
