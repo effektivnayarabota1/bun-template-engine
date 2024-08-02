@@ -1,7 +1,7 @@
 import { create_ssr_component } from "@svelte/internal";
 import FlatBte from "../templates/flat.bte";
 
-export const testApp = async () => {
+export const app = async () => {
   const server = Bun.serve({
     fetch(req) {
       console.log("raw bte file from plugin:");
