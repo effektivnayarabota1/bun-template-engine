@@ -1,7 +1,7 @@
 import { plugin } from "bun";
 
 // TODO перенести эту функцию в setup
-const { compile } = await import("../compiler/index.js");
+const { compile } = await import("compiler");
 
 export const bteRuntimePlugin = plugin({
   name: "bteRuntimePlugin",

@@ -1,5 +1,9 @@
-import { create_ssr_component } from "@svelte/internal";
-import FlatBte from "../templates/flat.bte";
+// TODO замени create_ssr_component на локальный пакет
+
+// import { create_ssr_component } from "@svelte/internal";
+import { create_ssr_component } from "svelte/internal";
+
+import { FlatBte } from "templates";
 
 export const app = async () => {
   const server = Bun.serve({
