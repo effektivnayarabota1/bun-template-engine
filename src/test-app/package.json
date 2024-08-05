@@ -6,7 +6,7 @@
     ".": "./src/index.js"
   },
   "dependencies": {
-    "svelte/internal": "workspace:*",
-    "templates": "workspace:*"
+    "templates": "workspace:*",
+    "rewriter": "workspace:*"
   }
 }

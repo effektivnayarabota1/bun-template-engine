@@ -1,25 +1,28 @@
-// TODO замени create_ssr_component на локальный пакет
-
 // import { create_ssr_component } from "@svelte/internal";
-import { create_ssr_component } from "svelte/internal";
 
 import { FlatBte } from "templates";
+import { indexHtmlTemplate } from "templates";
+import { BtePageView } from "rewriter";
+
+const btePageView = new BtePageView(indexHtmlTemplate);
 
 export const app = async () => {
   const server = Bun.serve({
-    fetch(req) {
-      console.log("raw bte file from plugin:");
-      console.log(FlatBte);
+    async fetch(req) {
+      // console.log("raw bte file from plugin:");
+      // console.log(FlatBte);
 
-      console.log("create_ssr_component: ");
-      console.log(create_ssr_component);
+      const rewritedHtmlPage = await btePageView.getPageHtml(FlatBte, {
+        color: "red",
+      });
 
-      const bteRenderResult = FlatBte.render();
+      console.log(rewritedHtmlPage);
 
-      console.log("* bte render result: ");
-      console.log(bteRenderResult);
-
-      return new Response(Bun.file("./src/templates/index.html"));
+      return new Response(rewritedHtmlPage, {
+        headers: {
+          "Content-Type": "text/html",
+        },
+      });
     },
   });
   console.log(`bun server started at ${server.url.href}`);
