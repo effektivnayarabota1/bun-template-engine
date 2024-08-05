@@ -15,9 +15,6 @@ const btePlugin = () => {
           generate: "ssr",
         });
 
-        console.log("result on plugin: ");
-        console.log(compileResult);
-
         return {
           contents: compileResult,
           loader: "js",
