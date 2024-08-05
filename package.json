@@ -8,11 +8,11 @@
     "templating"
   ],
   "workspaces": [
-    "src/**/*"
+    "src/*"
   ],
   "scripts": {
-    "dev": "bun --watch ./src/scripts/app.script.js",
-    "start": "NODE_ENV=production bun ./src/scripts/app.script.js"
+    "dev": "bun --watch ./src/scripts/src/launch-test-app.script.js",
+    "start": "NODE_ENV=production bun ./src/scripts/src/launch-test-app.script.js"
   },
   "author": "effectivnayarabota1",
   "license": "MIT",

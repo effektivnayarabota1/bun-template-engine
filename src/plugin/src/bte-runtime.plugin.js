@@ -1,27 +1,30 @@
 import { plugin } from "bun";
 
-// TODO перенести эту функцию в setup
-const { compile } = await import("../compiler/index.js");
+const { compile } = await import("compiler");
 
-export const bteRuntimePlugin = plugin({
-  name: "bteRuntimePlugin",
-  async setup(build) {
-    build.onLoad({ filter: /\.bte$/ }, async ({ path }) => {
-      const bteFile = Bun.file(path);
-      const bteFileText = await bteFile.text();
+const btePlugin = () => {
+  return {
+    name: "bteRuntimePlugin",
+    async setup(build) {
+      build.onLoad({ filter: /\.bte$/ }, async ({ path }) => {
+        const bteFile = Bun.file(path);
+        const bteFileText = await bteFile.text();
 
-      const compileResult = compile(bteFileText, {
-        filename: path,
-        generate: "ssr",
+        const compileResult = compile(bteFileText, {
+          filename: path,
+          generate: "ssr",
+        });
+
+        console.log("result on plugin: ");
+        console.log(compileResult);
+
+        return {
+          contents: compileResult,
+          loader: "js",
+        };
       });
+    },
+  };
+};
 
-      console.log("result on plugin: ");
-      console.log(compileResult);
-
-      return {
-        contents: compileResult,
-        loader: "js",
-      };
-    });
-  },
-});
+export const bteRuntimePlugin = plugin(btePlugin());

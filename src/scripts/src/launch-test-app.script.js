@@ -1,2 +1,2 @@
-import { app } from "../app/index.js";
+import { app } from "test-app";
 await app();
