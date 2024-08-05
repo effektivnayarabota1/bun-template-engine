@@ -1,3 +1,5 @@
+import { b } from "code-red";
+
 export const getParentBindings = (component, instance_javascript) => {
   return instance_javascript
     ? component.vars
