@@ -117,8 +117,8 @@ export const generateComponent = ({ componentData, result }) => {
     // program - это просто набор нод
     // в create ssr component этот массив превращается после функции PRINT
 
-    console.log("* program: ");
-    console.log(program.body[2].declarations[0].init);
+    // console.log("* program: ");
+    // console.log(program.body[2].declarations[0].init);
 
     // print собирает строку из тех нод, что в неё помещают!
     // в текущем случает у нас четыре ноды - импорт, объявление css,
