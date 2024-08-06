@@ -1,22 +1,17 @@
 // import { create_ssr_component } from "@svelte/internal";
 
-import { FlatBte } from "templates";
+import { IndexComponent } from "templates";
 import { indexHtmlTemplate } from "templates";
-import { BtePageView } from "rewriter";
+import { Bte } from "rewriter";
 
-const btePageView = new BtePageView(indexHtmlTemplate);
+const bte = new Bte(indexHtmlTemplate);
 
 export const app = async () => {
   const server = Bun.serve({
     async fetch(req) {
-      // console.log("raw bte file from plugin:");
-      // console.log(FlatBte);
-
-      const rewritedHtmlPage = await btePageView.getPageHtml(FlatBte, {
+      const rewritedHtmlPage = await bte.getPageHtml(IndexComponent, {
         color: "red",
       });
-
-      console.log(rewritedHtmlPage);
 
       return new Response(rewritedHtmlPage, {
         headers: {
