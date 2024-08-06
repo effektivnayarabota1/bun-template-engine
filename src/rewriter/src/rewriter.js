@@ -27,31 +27,25 @@ class AppendCssRewriter {
   }
 }
 
-export class BtePageView {
+export class Bte {
   constructor(blankHtmlPage) {
     // TODO провести сюда дефолтную страницу.
     // в случае пустой инициализации класса, сводить с дефолтной
     this.blankHtmlPage = blankHtmlPage;
-
-    // const renderResult = SvelteComponent.render(props);
-
-    // this.componentBody = renderResult.html;
-    // this.componentCss = renderResult.css.code;
-    // this.componentHead = renderResult.head;
   }
 
-  async getPageHtml(bteComponent, props) {
-    // TODO если компонент не был проведен, то возвращать пустую html страницу
+  async getPageHtml(svelteComponent, props) {
+    // TODO если компонент не был проведен, то возвращать бланковую html страницу
+    const renderResult = svelteComponent.render(props);
 
-    const renderResult = bteComponent.render(props);
-    Object.assign(this, renderResult);
+    this.head = renderResult.head;
+    this.body = renderResult.html;
+    this.css = renderResult.css.code;
 
     const rewriter = new HTMLRewriter()
       .on("html", new AppendHeadRewriter(this.head))
-      .on("html", new AppendBodyRewriter(this.html))
+      .on("html", new AppendBodyRewriter(this.body))
       .on("html", new AppendCssRewriter(this.css));
-
-    console.log(this.css);
 
     const pageHtml = rewriter.transform(this.blankHtmlPage);
     return pageHtml;
