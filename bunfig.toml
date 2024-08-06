@@ -1,1 +1,1 @@
-preload = ['./src/plugin/src/bte-runtime.plugin.js']
+preload = ['./src/plugin/src/runtime.plugin.js']
