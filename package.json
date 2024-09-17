@@ -14,7 +14,7 @@
     "src/*"
   ],
   "scripts": {
-    "dev": "bun --watch ./src/scripts/src/launch-test-app.script.js",
+    "dev": "bun --watch ./src/entrypoint/src/test-app.entrypoint.js",
     "start": "NODE_ENV=production bun ./src/scripts/src/launch-test-app.script.js"
   },
   "author": "effectivnayarabota1",
