@@ -1,5 +1,5 @@
 {
-  "name": "templates",
+  "name": "test-templates",
   "type": "module",
   "main": "src/index.js",
   "exports": {
