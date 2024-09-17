@@ -6,7 +6,7 @@
     ".": "./src/index.js"
   },
   "dependencies": {
-    "templates": "workspace:*",
+    "test-templates": "workspace:*",
     "rewriter": "workspace:*"
   }
 }

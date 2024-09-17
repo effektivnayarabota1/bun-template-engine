@@ -1,10 +1,8 @@
-// import { create_ssr_component } from "@svelte/internal";
-
-import { IndexComponent } from "templates";
-import { indexHtmlTemplate } from "templates";
+import { IndexComponent } from "test-templates";
 import { Bte } from "rewriter";
 
-const bte = new Bte(indexHtmlTemplate);
+const bte = new Bte();
+await bte.init();
 
 export const app = async () => {
   const server = Bun.serve({
@@ -20,6 +18,7 @@ export const app = async () => {
       });
     },
   });
+
   console.log(`bun server started at ${server.url.href}`);
   return server;
 };
