@@ -1,4 +1,3 @@
-// import { indexHtmlTemplate } from "test-templates";
 import { defaultBlankHtml } from "test-templates";
 
 class AppendHeadRewriter {
@@ -32,22 +31,23 @@ class AppendCssRewriter {
 
 export class Bte {
   constructor(blankHtmlPath) {
-    // TODO можно импортировать сразу html-страницу, без дополнительных преобразований
+    // TODO можно импортировать сразу html-страницу,
+    // без дополнительных преобразований
     // см документацию bun
 
     this.blankHtmlPath = blankHtmlPath || defaultBlankHtml;
-    console.log(this.blankHtmlPath);
   }
 
   async init() {
-    console.log(this.blankHtmlPath);
     const blankHtmlFile = Bun.file(this.blankHtmlPath);
     const blankHtmlString = await blankHtmlFile.text();
     this.blankHtmlPage = blankHtmlString;
   }
 
   async getPageHtml(svelteComponent, props) {
-    // TODO если компонент не был проведен, то возвращать бланковую html страницу
+    // TODO если компонент не был проведен,
+    // то возвращать бланковую html страницу
+
     const renderResult = svelteComponent.render(props);
 
     this.head = renderResult.head;
