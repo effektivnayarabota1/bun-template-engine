@@ -20,6 +20,7 @@
   "author": "effectivnayarabota1",
   "license": "MIT",
   "dependencies": {
+    "estree-walker": "^3.0.3",
     "svelte": "^4.2.18"
   }
 }
