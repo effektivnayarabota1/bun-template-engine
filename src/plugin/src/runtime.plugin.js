@@ -1,5 +1,3 @@
-import { plugin } from "bun";
-
 export const btePlugin = () => {
   return {
     name: "bteRuntimePlugin",
@@ -24,5 +22,3 @@ export const btePlugin = () => {
     },
   };
 };
-
-await plugin(btePlugin());

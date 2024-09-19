@@ -1,1 +1,1 @@
-export * from "./bte-runtime.plugin.js";
+export * from "./runtime.plugin.js";
